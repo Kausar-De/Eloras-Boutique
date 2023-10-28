@@ -1,0 +1,92 @@
+{% extends 'store/base.html' %}
+{% block content %}
+{% load static %}
+{% include 'store/navigation.html' %}
+{% load crispy_forms_tags %}
+
+<div class="row" style="margin-left: 0.5%; margin-right: 0.5%;">
+  <div class="col-lg-4">
+    <div class="box-element" id="form-wrapper">
+      <a class="btn btn-outline-dark" href="{% url 'cart' %}">&#x2190; Back to Cart</a>
+      <hr>
+      <form method="POST" action="" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% if request.user.customer.user == None %}
+          <div id="user-info">
+            <p><strong>Personal Information:</strong></p>
+            <hr>
+            <div class="form-field">
+              {{ custform.name|as_crispy_field }}
+            </div>
+            <div class="form-field">
+              {{ custform.email|as_crispy_field }}
+            </div>
+            <hr>
+          </div>
+        {% endif %}
+        
+        <div id="shipping-info">
+          <p><strong>Shipping Information:</strong></p>
+          <hr>
+          <div class="form-field">
+            {{ shippingform.address|as_crispy_field }}
+          </div>
+          <div class="form-field">
+            {{ shippingform.state|as_crispy_field }}
+          </div>
+          <div class="form-field">
+            {{ shippingform.city|as_crispy_field }}
+          </div>
+          <div class="form-field">
+            {{ shippingform.zipcode|as_crispy_field }}
+          </div>
+          <div class="form-field">
+            {{ shippingform.receipt|as_crispy_field }}
+          </div>
+        </div>
+        <hr>
+        <div class="d-grid gap-2"><input id="form-button" class="btn btn-success btn-block" type="submit" value="Place Order"></div>
+      </form>
+    </div>
+  </div>
+
+  <div class="col-lg-8">
+    <div class="box-element">
+      <div class="row">
+        <h2>Payment Details</h2>
+        <hr>
+        <div class="col-lg-8">
+          <p><strong>Step 1: </strong>Please pay the total indicated below to any of the following payment channels:</p>
+          <p><strong>Netbanking: </strong><br>Account No.: 1662050002486 <br> IFSC Code: PUNB0166220 <br> Beneficiary: Elora De</p>
+          <p><strong>UPI: </strong>elorasbtq@pnb</p>
+          <p><strong>Step 2: </strong>Please take a screenshot confirming the transaction with visible transaction ID and upload it in the shipping form</p>
+          <p><strong>NOTE: </strong>Order may be cancelled at our discretion if payment discrepancy is found.</p>
+        </div>
+        <div class="col-lg-4">
+          <img src="{% static '/images/pnb_qr.jpg' %} " width="80%" >
+        </div>
+      </div>
+    </div>
+    <br>
+    <div class="box-element">
+      <table class="table">
+        <tr>
+          <th><h3>Order Summary</h3></th>
+          <th><h5>Items:   {{order.get_cart_items}}</h5><h5>Total:   INR {{order.get_cart_total|floatformat:2}}</h5></th>
+        </tr>
+      </table>
+      {% for item in order.orderitem_set.all %}
+        <div class="cart-row">
+          <div style="flex:2"><img class="row-image" src="{{item.product.image.url}}"></div>
+          <div style="flex:2"><p>{{item.product.name}}</p></div>
+          <div style="flex:1"><p>{{item.product.colour}}</p></div>
+          <div style="flex:1"><p>{{item.product.size}}</p></div>
+          <div style="flex:1"><p>{{item.product.fabric}}</p></div>
+          <div style="flex:1"><p>INR {{item.product.price|floatformat:2}}</p></div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% endblock %}

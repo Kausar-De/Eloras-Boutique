@@ -1,0 +1,31 @@
+{% load static %}
+
+<html>
+  <body>
+    <br>
+    <div class="row" style="margin-left: 0.5%; margin-right: 0.5%;">
+      <div class="col">
+        <div style="box-shadow:hsl(0, 0%, 80%) 0 0 16px; background-color: #fff; border-radius: 4px; padding: 10px;" id="form-wrapper">
+          <h2 style="text-align: center;">Thank you for choosing Elora's Boutique!</h2>
+          <h5>Hello, Valued Customer!</h5>
+          <br>
+          <h5>This email is to confirm that your order was successfully placed with us on {{order.date_ordered}} under the name of {{custname}}. We will mail you shortly regarding order tracking information and the status of your order.</h5>
+          <br>
+          <h5> Please find your order details attached below.</h5>
+          <br>
+          <div style="box-shadow:hsl(0, 0%, 80%) 0 0 16px; background-color: #fff; border-radius: 4px; padding: 10px;">
+            <h4>{{order.date_ordered}} | Items: {{order.get_cart_items}} | Total: {{order.get_cart_total}} | Transaction ID: {{order.txn_id}}</h3>
+            <hr>
+            {% for product in order.get_cart_details %}
+              <p>{{product}} | {{product.colour}} | {{product.size}} | {{product.fabric}} | INR {{product.price|floatformat:2}}</p>
+            {% endfor %}
+          </div>
+          <br>
+          <h5>If you find any discrepancy with your order, or wish to cancel, please email us on elorasbtq@gmail.com or call/whatsapp us on +919903055237.</h5>
+          <br>
+          <h5>We thank you once again for shopping with Elora's Boutique, and we hope the products satisfy your needs!</h5>
+        </div>  
+      </div>
+    </div>
+  </body>
+</html>

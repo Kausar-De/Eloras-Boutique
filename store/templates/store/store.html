@@ -1,0 +1,52 @@
+{% extends 'store/base.html' %}
+{% block content %}
+{% load static %}
+{% include 'store/navigation.html' %}
+{% load crispy_forms_tags %}
+
+<br>
+
+{% for message in messages %}
+  <h6 style="text-align: center; color: green;">{{message}}</h6>
+{% endfor %}
+
+<div class="row" style="margin-left: 0.5%; margin-right: 0.5%;">
+  <div class="col-2">
+    <div class="card card-body">
+      <h4>Filters</h4>
+      <form method="GET">
+        {{myFilter.form|crispy}}
+        <button class="btn btn-success" type="submit">Filter</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="col-10">
+    <div class="row">
+      {% for product in products %}
+        {% if product.instock == True %}
+          <div class="col-lg-4">
+            {% if product.image %}
+              <img class="thumbnail" src="{{product.image.url}}">
+            {% else %}
+              <img class="thumbnail" src="{% static 'images/placeholder.png' %}">
+            {% endif %}
+            <div class="box-element product">
+              <h5><strong>{{product.name}}</strong></h6>
+              <hr style="margin-top: 2%; margin-bottom: 2%;">
+              <div class="d-flex justify-content-between">
+                <h6 style="display: inline-block; margin-bottom: 0;">Colour: {{product.colour}}</h6><h6 style="display: inline-block; text-align: right; margin-bottom: 0;">Size: {{product.size}}</h6>
+              </div>
+              <hr style="margin-top: 2%; margin-bottom: 2%;">
+              <a class="btn btn-outline-success" href="{% url 'product' product.id %}" id="view">View Product</a>
+              <h4 style="float: right"><strong>INR {{product.price|floatformat:2}}</strong></h4>
+            </div>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</div>
+<br>
+
+{% endblock %}

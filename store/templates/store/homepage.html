@@ -1,0 +1,63 @@
+{% extends 'store/base.html' %}
+{% block content %}
+{% load static %}
+{% include 'store/navigation.html' %}
+
+<style>
+    #sequence {
+        position:relative;
+        animation:animatetop 2.5s infinite
+    }
+    
+    @keyframes animatetop {
+        0% {top:-30px; opacity: 0} 
+        60% {top:0; opacity: 1}
+        100% {top:0; opacity: 1}
+    }
+</style>
+
+<h3>homepage</h3>
+
+<script>
+    $(window).on("load",function() {
+  $(window).scroll(function() {
+    var windowBottom = $(this).scrollTop() + $(this).innerHeight();
+    $(".fade").each(function() {
+      /* Check the location of each desired element */
+      var objectBottom = $(this).offset().top + $(this).outerHeight();
+      
+      /* If the element is completely within bounds of the window, fade it in */
+      if (objectBottom < windowBottom) { //object comes into view (scrolling down)
+        if ($(this).css("opacity")==0) {$(this).fadeTo(500,1);}
+      } else { //object goes out of view (scrolling up)
+        if ($(this).css("opacity")==1) {$(this).fadeTo(500,0);}
+      }
+    });
+  }).scroll(); //invoke scroll-handler on page-load
+});
+
+/*var words = ['Letterheads', 'College/School Projects', 'Study Materials', 'Company Projects', 'Business Cards', 'Presentations', 'Personal Documents', 'Certificates', 'Documents'];
+
+textSequence(0);
+function textSequence(i) {
+
+    if (words.length > i) {
+        setTimeout(function() {
+            document.getElementById("sequence").innerHTML = words[i];
+            textSequence(++i);
+        }, 2500); // 1 second (in milliseconds)
+
+    } else if (words.length == i) { // Loop
+        textSequence(0);
+    }
+
+}*/
+</script>
+
+<script type="text/javascript">
+  var user = "{{request.user}}"
+</script>
+
+<script type="text/javascript" src="{% static 'js/cart.js' %}"></script>
+
+{% endblock %}
