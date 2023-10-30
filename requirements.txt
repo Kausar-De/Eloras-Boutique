@@ -12,6 +12,7 @@ django-multiselectfield==0.1.12
 django-storages==1.12.3
 gunicorn==20.1.0
 jmespath==0.10.0
+mysqlclient==2.2.0
 numpy==1.25.2
 pandas==2.0.3
 Pillow==9.0.0
