@@ -6,7 +6,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.utils import timezone
 import datetime
-from .forms import CreateCustomerForm, CustomerForm, ShippingAddressForm
+from .forms import CreateCustomerForm, CustomerForm, ShippingAddressForm, OrderStatusForm, ProductForm
 from .models import *
 from .filters import ProductFilter
 # Create your views here.
@@ -239,5 +239,96 @@ def myOrders(request):
 
 	return render(request, 'store/myorders.html', context)
 
-def emailtemplate(request):
-	return render(request, 'store/emailtemplate.html')
+def adminPanel(request):
+	if request.user.is_superuser:
+		orders = Order.objects.filter(complete = True).order_by('-date_ordered')
+		products = Product.objects.all()
+
+		context = {'orders':orders, 'products':products}
+
+		return render(request, 'store/adminpanel.html', context)
+	else:
+		return redirect('store')
+	
+def orderDetail(request, pk):
+	if request.user.is_superuser:
+		order = Order.objects.get(id = pk)
+
+		shippingaddress = ShippingAddress.objects.get(order = order)
+
+		statusform = OrderStatusForm(request.POST, instance = order)
+		if request.method == 'POST':
+			statusform = OrderStatusForm(request.POST, instance = order)
+			if statusform.is_valid():
+				statusform.save()
+
+				context = {'shippingaddress':shippingaddress, 'statusform':statusform}
+
+				return render(request, 'store/orderdetail.html', context)
+			
+		context = {'shippingaddress':shippingaddress, 'statusform':statusform}
+
+		return render(request, 'store/orderdetail.html', context)
+	else:
+		return redirect('store')
+
+def deleteOrder(request, pk):
+	if request.user.is_superuser:
+		order = Order.objects.get(id = pk)
+
+		order.delete()
+
+		messages.info(request, 'Order Deleted Successfully!')
+		
+		return redirect('adminpanel')
+	else:
+		return redirect('store')
+
+def productDetail(request, pk):
+	if request.user.is_superuser:
+		product = Product.objects.get(id = pk)
+
+		productform = ProductForm(request.POST, instance = product)
+		if request.method == 'POST':
+			productform = ProductForm(request.POST, instance = product)
+			if productform.is_valid():
+				productform.save()
+
+				context = {'product':product, 'productform':productform}
+
+				return render(request, 'store/productdetail.html', context)
+			
+		context = {'product':product, 'productform':productform}
+
+		return render(request, 'store/productdetail.html', context)
+	else:
+		return redirect('store')
+	
+def addProduct(request):
+	if request.user.is_superuser:
+		prodform = ProductForm(request.POST, request.FILES)
+
+		if request.method == 'POST':
+			prodform = ProductForm(request.POST, request.FILES)
+			if prodform.is_valid():
+				prodform.save()
+				messages.info(request, 'Product Added Successfully!')
+				return redirect('adminpanel')
+	
+		context = {'prodform':prodform}
+
+		return render(request, 'store/addproduct.html', context)
+	else:
+		return redirect('store')
+
+def deleteProduct(request, pk):
+	if request.user.is_superuser:
+		product = Product.objects.get(id = pk)
+
+		product.delete()
+
+		messages.info(request, 'Product Deleted Successfully!')
+		
+		return redirect('adminpanel')
+	else:
+		return redirect('store')

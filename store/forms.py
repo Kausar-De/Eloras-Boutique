@@ -1,7 +1,7 @@
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.forms import ModelForm
-from .models import Customer, ShippingAddress
+from .models import Customer, ShippingAddress, Order, Product
 from django.utils.translation import gettext_lazy as _
 
 class CreateCustomerForm(UserCreationForm):
@@ -33,4 +33,27 @@ class ShippingAddressForm(ModelForm):
             'state': _('State'),
             'zipcode': _('6 Digit PIN Code'),
             'receipt': _('Upload Payment Confirmation Screenshot'),
+        }
+
+class OrderStatusForm(ModelForm):
+    class Meta:
+        model = Order
+        fields = ['status']
+        labels = {
+            'status': _('Update Order Status'),
+        }
+
+class ProductForm(ModelForm):
+    class Meta:
+        model = Product
+        fields = '__all__'
+        labels = {
+            'name': _('Name'),
+            'price': _('Price'),
+            'category': _('Category'),
+            'colour': _('Colour'),
+            'size': _('Size'),
+            'fabric': _('Fabric'),
+            'image': _('Image'),
+            'instock': _('In Stock?')
         }

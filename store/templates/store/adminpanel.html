@@ -1,0 +1,76 @@
+{% extends 'store/base.html' %}
+{% load static %}
+{% block content %}
+
+{% for message in messages %}
+    <h6 style="text-align: center; color: green;">{{message}}</h6>
+{% endfor %}
+
+<div class="row" style="margin-left: 0.5%; margin-right: 0.5%;">
+    <div class="box-element">
+        <h2 style="text-align: center;">Admin Panel</h2>  
+    </div>
+    <br>
+    <div class="col-lg-8">
+        <div class="box-element">
+            <h4 style="text-align: center;">Order List</h4>
+        </div>
+        <br>
+        {% for order in orders %}
+            <div class="box-element">
+                <h5>{{order.date_ordered}} | Items: {{order.get_cart_items}} | Total: {{order.get_cart_total}} | Customer: {{order.customer.name}} | Status: {{order.status}} | <a href="{% url 'orderdetail' order.id %}">View</a></h5>
+                <hr>
+                <div class="cart-row">
+                    <div style="flex:1"></div>
+                    <div style="flex:1"><strong>Name</strong></div>
+                    <div style="flex:1"><strong>Colour</strong></div>
+                    <div style="flex:1"><strong>Size</strong></div>
+                    <div style="flex:1"><strong>Fabric</strong></div>
+                    <div style="flex:1"><strong>Price</strong></div>
+                </div>
+                {% for product in order.get_cart_details %}
+                    <div class="cart-row">
+                        {% if product.imageURL %}
+                            <div style="flex:1"><img class="row-image" src="{{product.imageURL}}"></div>
+                        {% else %}
+                            <div style="flex:1"><img class="row-image" src="{% static 'images/placeholder.png' %}"></div>
+                        {% endif %}
+                        <div style="flex:1"><p>{{product}}</p></div>
+                        <div style="flex:1"><p>{{product.colour}}</p></div>
+                        <div style="flex:1"><p>{{product.size}}</p></div>
+                        <div style="flex:1"><p>{{product.fabric}}</p></div>
+                        <div style="flex:1"><p>INR {{product.price|floatformat:2}}</p></div>
+                    </div>
+                {% endfor %}
+            </div>
+            <br>
+        {% endfor %}
+    </div>
+    <div class="col-lg-4">
+        <div class="box-element">
+            <h4 style="text-align: center;">Product List | <a href="{% url 'addproduct' %}">Add Product</a></h4>
+        </div>
+        <br>
+        {% for product in products %}
+            {% if product.image %}
+              <img class="thumbnail" src="{{product.image.url}}">
+            {% else %}
+              <img class="thumbnail" src="{% static 'images/placeholder.png' %}">
+            {% endif %}
+            <div class="box-element product">
+              <h5><strong>{{product.name}}</strong></h6>
+              <hr style="margin-top: 2%; margin-bottom: 2%;">
+              <div class="d-flex justify-content-between">
+                <h6 style="display: inline-block; margin-bottom: 0;">Category: {{product.category}}</h6><h6 style="display: inline-block; margin-bottom: 0;">Colour: {{product.colour}}</h6><h6 style="display: inline-block; margin-bottom: 0;">Fabric: {{product.fabric}}</h6><h6 style="display: inline-block; margin-bottom: 0;">Size: {{product.size}}</h6>
+              </div>
+              <hr style="margin-top: 2%; margin-bottom: 2%;">
+              <a class="btn btn-success" href="{% url 'productdetail' product.id %}" id="view">View Product</a>
+              <h4 style="float: right"><strong>INR {{product.price|floatformat:2}}</strong></h4>
+            </div>
+            <br>
+      {% endfor %}
+    </div>
+</div>
+
+
+{% endblock %}

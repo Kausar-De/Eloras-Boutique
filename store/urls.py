@@ -15,5 +15,10 @@ urlpatterns = [
     path('cart/', views.cart, name = "cart"),
     path('checkout/', views.checkout, name = "checkout"),
 
-    path('emailtemplate/', views.emailtemplate, name = "emailtemplate"),
+    path('adminpanel/', views.adminPanel, name = "adminpanel"),
+    path('orderdetail/<str:pk>/', views.orderDetail, name = "orderdetail"),
+    path('deleteorder/<str:pk>/', views.deleteOrder, name = "deleteorder"),
+    path('productdetail/<str:pk>/', views.productDetail, name = "productdetail"),
+    path('addproduct', views.addProduct, name = "addproduct"),
+    path('deleteproduct/<str:pk>/', views.deleteProduct, name = "deleteproduct"),
 ]

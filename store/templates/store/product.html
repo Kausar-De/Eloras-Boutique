@@ -8,9 +8,12 @@
 		<img style="margin-left: 15px; margin-right: 15px;" src="{{product.imageURL}}" width="100%" height="100%">
 	</div>
 	<div style="padding:50px" class="col-lg-6">
-		<div class="card card-body">			
+		<div class="box-element">
+			<a class="btn btn-outline-dark" style="display:inline-block" href="{% url 'store' %}">&#x2190; Continue Shopping</a>
+			<hr>			
 			<h3>{{product.name}}</h3>
 			<hr>
+            <h4>Category: {{product.category}}</h4>
 			<h4>Colour: {{product.colour}}</h4>
 			<h4>Size: {{product.size}}</h4>
 			<h4>Fabric: {{product.fabric}}</h4>

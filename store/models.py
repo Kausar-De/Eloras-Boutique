@@ -14,7 +14,6 @@ class Customer(models.Model):
 			name = self.device
 		return str(name)
 
-
 class Product(models.Model):
     CATEGORIES = (
         ('Saree', 'Saree'),
@@ -74,10 +73,19 @@ class Product(models.Model):
         return url
 
 class Order(models.Model):
+    STATUSES = (
+        ('Pending', 'Pending'),
+        ('Preparing for Dispatch', 'Preparing for Dispatch'),
+        ('Dispatched', 'Dispatched'),
+        ('Delivered', 'Delivered'),
+        ('Rejected', 'Rejected'),
+    )
+
     customer = models.ForeignKey(Customer, on_delete = models.SET_NULL, null = True, blank = True)
     date_ordered = models.DateTimeField(auto_now_add = True)
     complete = models.BooleanField(default = False)
     txn_id = models.CharField(max_length = 200, null = True)
+    status = models.CharField(max_length = 200, choices = STATUSES, default = 'Pending')
 
     def __str__(self):
         return str(self.id)
